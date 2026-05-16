@@ -1,0 +1,39 @@
+.app-container { max-width: 1200px; margin: 0 auto; padding: 1rem; display: flex; flex-direction: column; gap: 1.5rem; }
+header { text-align: center; margin-bottom: 0.5rem; }
+header h1 { font-size: 2.2rem; margin-bottom: 0.25rem; line-height: 1.1; }
+header p { font-size: 1rem !important; }
+.table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -1rem; padding: 0 1rem; }
+.table-wrapper::-webkit-scrollbar { height: 6px; }
+.table-wrapper::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 4px; }
+.table-wrapper::-webkit-scrollbar-thumb { background: var(--neon-green); border-radius: 4px; }
+table { width: 100%; min-width: 600px; border-collapse: collapse; text-align: center; }
+th { color: var(--text-muted); font-weight: 600; padding: 0.75rem 0.5rem; font-size: 1rem; border-bottom: 1px solid var(--border-color); }
+td { padding: 0.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 1.1rem; }
+tr:hover { background-color: rgba(255, 255, 255, 0.05); }
+.team-cell { display: flex; align-items: center; gap: 0.75rem; text-align: left; font-weight: 600; }
+.team-logo { width: 28px; height: 28px; object-fit: contain; background-color: rgba(255,255,255,0.1); border-radius: 50%; padding: 2px; }
+.pos-badge { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 4px; font-size: 0.9rem; }
+.pts-col { font-weight: bold; font-size: 1.2rem; }
+tr:nth-child(1) .pos-badge { background-color: var(--neon-green); color: black; box-shadow: 0 0 10px rgba(0, 255, 102, 0.5); }
+tr:nth-child(2) .pos-badge { background-color: #00bfff; color: black; }
+tr:nth-child(3) .pos-badge, tr:nth-child(4) .pos-badge, tr:nth-child(5) .pos-badge, tr:nth-child(6) .pos-badge, tr:nth-child(7) .pos-badge, tr:nth-child(8) .pos-badge { background-color: #ff9900; color: black; }
+.export-btn { background: var(--neon-green); color: black; font-weight: bold; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; transition: all 0.2s; box-shadow: 0 0 15px rgba(0, 255, 102, 0.3); width: 100%; justify-content: center; }
+.export-btn:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(0, 255, 102, 0.5); }
+.match-panel { padding: 1.25rem; margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem; }
+.match-panel h2 { font-size: 1.3rem; text-align: center; margin-bottom: 0.5rem; }
+.match-form { display: flex; flex-direction: column; gap: 1.5rem; align-items: center; width: 100%; }
+.team-select-group { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; width: 100%; }
+select { width: 100%; padding: 0.75rem; border-radius: 6px; background: rgba(0,0,0,0.5); color: white; border: 1px solid var(--border-color); font-size: 1rem; }
+.score-input { width: 60px; text-align: center; padding: 0.75rem; border-radius: 6px; background: rgba(0,0,0,0.5); color: var(--neon-green); border: 1px solid var(--neon-green); font-size: 1.5rem; font-weight: bold; }
+.vs-badge { background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold; font-size: 1.2rem; }
+.submit-btn { background: white; color: black; font-weight: bold; border: none; padding: 0.75rem 2rem; border-radius: 6px; cursor: pointer; font-size: 1.1rem; width: 100%; transition: all 0.2s; }
+.submit-btn:hover { background: #e0e0e0; }
+@media (min-width: 768px) {
+  .app-container { padding: 2rem; }
+  header h1 { font-size: 3rem; }
+  .table-wrapper { margin: 0; padding: 0; }
+  .match-form { flex-direction: row; justify-content: space-between; }
+  .team-select-group { flex-direction: row; width: auto; }
+  select { width: 200px; }
+  .export-btn, .submit-btn { width: auto; }
+}
