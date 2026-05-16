@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Download, Undo2, Lock, Unlock } from "lucide-react";
 import StandingsTable from "./components/StandingsTable";
 import MatchInputPanel from "./components/MatchInputPanel";
+import UpcomingMatches from "./components/UpcomingMatches";
+import AdminUpcomingMatch from "./components/AdminUpcomingMatch";
 import { exportToExcel } from "./utils/excelExport";
 import { supabase } from "./supabaseClient";
 import "./App.css";
@@ -11,17 +13,27 @@ const ADMIN_PIN = "1234";
 function App() {
   const [teams, setTeams] = useState([]);
   const [history, setHistory] = useState([]);
+  const [upcomingMatches, setUpcomingMatches] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchTeams();
+    fetchUpcomingMatches();
     const subscription = supabase
       .channel("schema-db-changes")
       .on("postgres_changes", { event: "*", schema: "public", table: "teams" }, () => fetchTeams())
+      .on("postgres_changes", { event: "*", schema: "public", table: "upcoming_matches" }, () => fetchUpcomingMatches())
       .subscribe();
     return () => supabase.removeChannel(subscription);
   }, []);
+
+  const fetchUpcomingMatches = async () => {
+    const { data, error } = await supabase.from("upcoming_matches").select("*").order("date", { ascending: true }).order("time", { ascending: true });
+    if (!error && data) {
+      setUpcomingMatches(data);
+    }
+  };
 
   const fetchTeams = async () => {
     setLoading(true);
@@ -51,6 +63,14 @@ function App() {
     await supabase.from("teams").update(visitor).eq("id", visitor.id);
   };
 
+  const handleAddUpcomingMatch = async (matchData) => {
+    await supabase.from("upcoming_matches").insert([matchData]);
+  };
+
+  const handleDeleteUpcomingMatch = async (id) => {
+    await supabase.from("upcoming_matches").delete().eq("id", id);
+  };
+
   const handleUndo = async () => {
     if (history.length === 0) return;
     const newHistory = [...history];
@@ -70,11 +90,17 @@ function App() {
       </header>
       <main>
         {loading && teams.length === 0 ? <div style={{ textAlign: "center", padding: "2rem" }}>Conectando a la base de datos...</div> : <StandingsTable teams={teams} />}
+        {!loading && <UpcomingMatches matches={upcomingMatches} teams={teams} />}
         <div style={{ display: "flex", justifyItems: "center", justifyContent: "flex-end", marginTop: "1rem", gap: "1rem", flexWrap: "wrap" }}>
           {isAdmin && history.length > 0 && <button className="export-btn" style={{backgroundColor: "#ff4444", color: "white", boxShadow: "0 0 15px rgba(255, 68, 68, 0.3)"}} onClick={handleUndo}><Undo2 size={20} /> Deshacer</button>}
           <button className="export-btn" onClick={() => exportToExcel(teams)}><Download size={20} /> Exportar</button>
         </div>
-        {isAdmin && <MatchInputPanel teams={teams} onRegisterMatch={handleRegisterMatch} />}
+        {isAdmin && (
+          <>
+            <MatchInputPanel teams={teams} onRegisterMatch={handleRegisterMatch} />
+            <AdminUpcomingMatch teams={teams} upcomingMatches={upcomingMatches} onAddMatch={handleAddUpcomingMatch} onDeleteMatch={handleDeleteUpcomingMatch} />
+          </>
+        )}
       </main>
     </div>
   );
