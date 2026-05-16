@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CalendarPlus, Trash2 } from 'lucide-react';
 
-export default function AdminUpcomingMatch|{ teams, upcomingMatches, onAddMatch, onDeleteMatch }) {
+export default function AdminUpcomingMatch({ teams, upcomingMatches, onAddMatch, onDeleteMatch }) {
   const [localId, setLocalId] = useState('');
   const [visitorId, setVisitorId] = useState('');
   const [date, setDate] = useState('');
